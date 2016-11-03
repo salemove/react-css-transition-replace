@@ -1,9 +1,5 @@
 .idea
 /node_modules
 npm-debug.log
-
-# Exclude compiled files
-/lib
-
 /demo/assets/app.js
 /gh-pages
