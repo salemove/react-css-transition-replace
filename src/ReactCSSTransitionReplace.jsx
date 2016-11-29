@@ -101,19 +101,12 @@ export default class ReactCSSTransitionReplace extends React.Component {
     const nextChild = nextProps.children ? React.Children.only(nextProps.children) : false
     const currentChild = this.state.currentChild
 
-    if (currentChild && nextChild && nextChild.key === currentChild.key) {
+    // Avoid silencing the transition when this.state.nextChild exists because it means that there’s
+    // already a transition ongoing that has to be replaced.
+    if (currentChild && nextChild && nextChild.key === currentChild.key && !this.state.nextChild) {
       // Nothing changed, but we are re-rendering so update the currentChild.
-      // Setting nextChild because of the following scenario which would end in
-      // an inconsistent state:
-      //   1. render component A
-      //   2. start rendering component B but before enter transition completes
-      //   3. render component A
-      // This flow would happen when leaveTransition is not enabled. Without
-      // setting nextChild, this component would render component B at least
-      // once after 3rd step in the scenario described above.
       return this.setState({
         currentChild: nextChild,
-        nextChild: nextChild,
       })
     }
 
